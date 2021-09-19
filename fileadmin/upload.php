@@ -23,7 +23,7 @@ echo "<form action=\"\" method=\"GET\">\n";
 echo "<input type=\"hidden\" name=\"getcwd\" value=\"$getcwd\" />\n";
 if (isset($_GET['url'])) echo "<input type=\"hidden\" name=\"url\" />\n";
 echo "数量-&gt;<input type=\"text\" name=\"uploadnum\" />\n";
-echo "<input type=\"submit\" value=\"GO\" />\n";
+echo "<div class=\"button\" id='uploadnum'/>GO</div>\n";
 echo "</form>\n";
 echo "</div>\n";
 if (isset($_GET['url'])) {
@@ -70,21 +70,11 @@ if (isset($_GET['url'])) {
     }
     echo "<div class=\"like\">输入您的上传地址</div>\n";
     echo "<form action=\"?url&getcwd=" . urlencode($getcwd) . "\" method=\"POST\">\n";
-    if (!isset($_GET['uploadnum'])) {
-        echo "<div class=\"love\">\n";
-        echo "地址[+]<input type=\"text\" name=\"fupload[]\" />\n";
-        echo "</div>\n";
-    } else {
-        $i = 0;
-        $uploadnum = (int)trim($_GET['uploadnum']);
-        if ($uploadnum < 1) $uploadnum = 1;
-        while ($i < $uploadnum) {
-            echo "<div class=\"love\">\n";
-            echo "地址[" . ($i + 1) . "]<input type=\"text\" name=\"fupload[]\" />\n";
-            echo "</div>\n";
-            $i++;
-        }
-    }
+	echo "<div id='fileList'>\n";
+    echo "<div class=\"love\">\n";
+	echo "地址[1]<input type=\"text\" name=\"fupload[]\" />\n";
+	echo "</div>\n";
+	echo "</div>\n";
     echo "<div class=\"love\">\n";
     echo "<input type=\"submit\" value=\"远程上传所有文件\" />（有效&ensp;地址）\n";
     echo "</div>\n";
@@ -115,25 +105,40 @@ if (isset($_GET['url'])) {
     }
     echo "<div class=\"like\">选择您的上传文件</div>\n";
     echo "<form action=\"?getcwd=" . urlencode($getcwd) . "\" method=\"POST\" enctype=\"multipart/form-data\">\n";
-    if (!isset($_GET['uploadnum'])) {
-        echo "<div class=\"love\">\n";
-        echo "文件[+]<input type=\"file\" name=\"fupload[]\" />\n";
-        echo "</div>\n";
-    } else {
-        $i = 0;
-        $uploadnum = (int)trim($_GET['uploadnum']);
-        if ($uploadnum < 1) $uploadnum = 1;
-        while ($i < $uploadnum) {
-            echo "<div class=\"love\">\n";
-            echo "文件[" . ($i + 1) . "]<input type=\"file\" name=\"fupload[]\" />\n";
-            echo "</div>\n";
-            $i++;
-        }
-    }
+	echo "<div id='fileList'>\n";
+    echo "<div class=\"love\">\n";
+	echo "文件[1]<input type=\"file\" name=\"fupload[]\" />\n";
+	echo "</div>\n";
+	echo "</div>\n";
     echo "<div class=\"love\">\n";
     echo "<input type=\"submit\" value=\"上传所有选择文件\" />（有效&ensp;文件）\n";
     echo "</div>\n";
     echo "</form>\n";
 }
 xhtml_footer();
+
+echo <<<XHTML
+<script>Zepto(document).ready(function($) {
+$("#uploadnum").on("click", function(){
+	var type = $("input[name='url']").length;
+	var num = parseInt($("input[name='uploadnum']").val()),all = parseInt($(this).attr('data'));
+	if(!isNaN(num)){
+		if(!all){
+			all = 1;
+			num--;
+		}
+		if(type){
+			for(var i=0; i<num; i++){
+				$("#fileList").append('<div class="love">地址['+(all+i+1)+']<input type="text" name="fupload[]"></div>');
+			}
+		}else{
+			for(var i=0; i<num; i++){
+				$("#fileList").append('<div class="love">文件['+(all+i+1)+']<input type="file" name="fupload[]"></div>');
+			}
+		}
+		$(this).attr('data',all+i);
+	}
+});
+});</script>
+XHTML;
 ?>

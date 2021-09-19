@@ -105,7 +105,7 @@ if (function_exists("ini_set")) ini_set("max_execution_time", "0");
 //用户的登录
 if (!isset($_SESSION['adminstatus'])) {
     if (isset($_POST['username']) && isset($_POST['password'])) {
-        if (U === $_POST['username'] && P === $_POST['password']) {
+        if (U === $_POST['username'] && P === md5($_POST['password'])) {
             $_SESSION['adminstatus'] = true;
             header("Location: {$_SERVER['SCRIPT_NAME']}?" . str_ireplace("&logout", "", $_SERVER['QUERY_STRING']));
             exit;

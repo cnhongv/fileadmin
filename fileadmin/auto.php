@@ -3,7 +3,7 @@ if (basename($_SERVER['SCRIPT_NAME']) != "auto.php") {
     if (!file_exists("admin.php")) {
         if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['password2'])) {
             if (strlen($u = trim($_POST['username'])) >= 5 && strlen($p = trim($_POST['password'])) >= 5 && $p === trim($_POST['password2'])) {
-                $data = "<?php\ndefine(\"U\",\"$u\");\ndefine(\"P\",\"$p\");\n?>";
+                $data = "<?php\ndefine(\"U\",\"$u\");\ndefine(\"P\",\"".md5($p)."\");\n?>";
                 if (file_put_contents("admin.php", $data)) {
                     header("Location: {$_SERVER['SCRIPT_NAME']}?{$_SERVER['QUERY_STRING']}");
                     exit;

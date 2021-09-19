@@ -20,6 +20,8 @@ XHTML;
 function xhtml_footer()
 {
     echo <<<XHTML
+		<script src="./js/zepto.min.js"></script>
+		<script type="text/javascript" src="./js/prettify.min.js"></script>
         <div id="footer">
 	    By：<a href="mailto:xiaoqidun@gmail.com">Xiaoqidun@Gmail.Com</a>
         </div>

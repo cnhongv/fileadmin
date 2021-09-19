@@ -69,7 +69,7 @@ if (!isset($_GET['path'])) {
         if (!($data = file_get_contents($path))) {
             echo "读取文件时发生了错误！\n";
         } else {
-            echo "<pre>";
+            echo "<pre class='prettyprint linenums'>";
             if (!isset($_GET['charset'])) {
                 echo nl2br(___codepre(___convert($data, "UTF-8")));
             } elseif (($charset = trim($_GET['charset'])) == "") {
@@ -77,10 +77,15 @@ if (!isset($_GET['path'])) {
             } else {
                 echo nl2br(___codepre(___convert($data, "UTF-8", $charset)));
             }
-            echo "<pre>\n";
+            echo "</pre>\n";
         }
         echo "</div>";
     }
     xhtml_footer();
+echo <<<XHTML
+<script>Zepto(document).ready(function($) {
+	 prettyPrint();
+});</script>
+XHTML;
 }
 ?>

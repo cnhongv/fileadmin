@@ -11,7 +11,7 @@ echo "<div class=\"love\">\n";
 echo "<form action=\"\" method=\"GET\">\n";
 echo "<input type=\"hidden\" name=\"getcwd\" value=\"$getcwd\" />\n";
 echo "数量-&gt;<input type=\"text\" name=\"createnum\" />\n";
-echo "<input type=\"submit\" value=\"GO\" />\n";
+echo "<div class=\"button\" id='createnum'/>GO</div>\n";
 echo "</form>\n";
 echo "</div>\n";
 if (isset($_POST['createtype']) && isset($_POST['createpath'])) if (is_array($_POST['createtype']) && is_array($_POST['createpath'])) if (count($_POST['createtype']) == count($_POST['createpath']) && count($_POST['createtype']) > 0) {
@@ -91,32 +91,35 @@ if (isset($_POST['createtype']) && isset($_POST['createpath'])) if (is_array($_P
 }
 echo "<div class=\"like\">定义创建数据路径</div>\n";
 echo "<form action=\"?getcwd=" . urlencode($getcwd) . "\" method=\"POST\">\n";
-if (!isset($_GET['createnum'])) {
-    echo "<div class=\"love\">\n";
-    echo "<select name=\"createtype[]\">\n";
-    echo "<option value=\"dir\">文件目录</option>\n";
-    echo "<option value=\"file\">空白文件</option>\n";
-    echo "</select>\n";
-    echo "路径[+]<input type=\"text\" name=\"createpath[]\" />\n";
-    echo "</div>\n";
-} else {
-    $i = 0;
-    $createnum = (int)trim($_GET['createnum']);
-    if ($createnum < 1) $createnum = 1;
-    while ($i < $createnum) {
-        echo "<div class=\"love\">\n";
-        echo "<select name=\"createtype[]\">\n";
-        echo "<option value=\"dir\">文件目录</option>\n";
-        echo "<option value=\"file\">空白文件</option>\n";
-        echo "</select>\n";
-        echo "路径[" . ($i + 1) . "]<input type=\"text\" name=\"createpath[]\" />\n";
-        echo "</div>\n";
-        $i++;
-    }
-}
+echo "<div id='fileList'>\n";
+echo "<div class=\"love\">\n";
+echo "<select name=\"createtype[]\">\n";
+echo "<option value=\"dir\">文件目录</option>\n";
+echo "<option value=\"file\">空白文件</option>\n";
+echo "</select>\n";
+echo "路径[1]<input type=\"text\" name=\"createpath[]\" />\n";
+echo "</div>\n";
+echo "</div>\n";
 echo "<div class=\"love\">\n";
 echo "<input type=\"submit\" value=\"创建所有输入数据\" />（有效&ensp;数据）\n";
 echo "</div>\n";
 echo "</form>\n";
 xhtml_footer();
+echo <<<XHTML
+<script>Zepto(document).ready(function($) {
+$("#createnum").on("click", function(){
+	var num = parseInt($("input[name='createnum']").val()),all = parseInt($(this).attr('data'));
+	if(!isNaN(num)){
+		if(!all){
+			all = 1;
+			num--;
+		}
+		for(var i=0; i<num; i++){
+			$("#fileList").append('<div class="love"><select name="createtype[]"><option value="dir">文件目录</option><option value="file">空白文件</option></select> 路径['+ (all+i+1) +']<input type="text" name="createpath[]"></div>');
+		}
+		$(this).attr('data',all+i);
+	}
+});
+});</script>
+XHTML;
 ?>

@@ -86,7 +86,8 @@ if (($data = $filesystem->getpath()) === false) {
     }
     echo "</select>\n";
     echo "<input type=\"submit\" value=\"执行\" />\n";
-    echo "（<a href=\"?path=" . urlencode($path) . "&select$multiple\">全选</a>|<a href=\"?path=" . urlencode($path) . "$multiple\">消选</a>）\n";
+    //echo "（<a href=\"?path=" . urlencode($path) . "&select$multiple\">全选</a>|<a href=\"?path=" . urlencode($path) . "$multiple\">消选</a>）\n";
+	echo "（<a href=\"javascript:;\" class='selectAll'>全选</a>）\n";
     echo "</div>\n";
     if (count($data[0]) != 0) {
         echo "\n<div class=\"like\">目录列表</div>\n";
@@ -142,4 +143,17 @@ if (($data = $filesystem->getpath()) === false) {
     echo "</form>\n";
 }
 xhtml_footer();
+echo <<<XHTML
+<script>Zepto(document).ready(function($) {
+ $(".selectAll").on("click", function(){
+	 var type = $(this).text(), t = "全选", ac = false;
+	 if(type==t){
+		 t = "消选";
+		 ac = true;
+	 }
+	 $(this).html(t);
+	 $("input[type='checkbox']").prop("checked", ac);
+});
+});</script>
+XHTML;
 ?>

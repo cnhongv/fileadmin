@@ -77,8 +77,9 @@ if (count($_SESSION['flist']) < 1) {
     echo "<form action=\"./flist.php?clean=array&getcwd=" . urlencode($getcwd) . "\" method=\"POST\">\n";
     echo "<div class=\"love\">\n";
     echo "<input type=\"submit\" value=\"从清单中清除所选\" />\n";
-    echo "（<a href=\"?cs&getcwd=" . urlencode($getcwd) . "\">全选</a>|<a href=\"?getcwd=" . urlencode($getcwd) . "\">消选</a>）\n";
-    echo "</div>\n";
+    //echo "（<a href=\"?cs&getcwd=" . urlencode($getcwd) . "\">全选</a>|<a href=\"?getcwd=" . urlencode($getcwd) . "\">消选</a>）\n";
+    echo "（<a href=\"javascript:;\" class='selectAll'>全选</a>）\n";
+	echo "</div>\n";
     $select = isset($_GET['cs']) ? "checked " : null;
     for ($i = 0; $i < count($_SESSION['flist']); $i++) {
         echo "<div class=\"love\">\n";
@@ -90,4 +91,17 @@ if (count($_SESSION['flist']) < 1) {
     echo "</form>\n";
 }
 xhtml_footer();
+echo <<<XHTML
+<script>Zepto(document).ready(function($) {
+ $(".selectAll").on("click", function(){
+	 var type = $(this).text(), t = "全选", ac = false;
+	 if(type==t){
+		 t = "消选";
+		 ac = true;
+	 }
+	 $(this).html(t);
+	 $("input[type='checkbox']").prop("checked", ac);
+});
+});</script>
+XHTML;
 ?>
